@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>听雨轩 - 高品质有声小说、听书平台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"PingFang SC","Microsoft YaHei",sans-serif}
+body{background:#f5f5f5;color:#333;font-size:14px;min-height:100vh}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+
+/* 顶部导航 */
+.top-nav{position:sticky;top:0;z-index:999;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.08)}
+.nav-wrap{max-width:1200px;margin:0 auto;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+
+/* 品牌区 */
+.nav-brand{display:flex;align-items:center;gap:30px}
+.brand-logo{display:flex;align-items:center;gap:6px}
+.brand-logo .icon{font-size:26px}
+.brand-logo .logo-text{font-size:22px;font-weight:bold;color:#ff6a00}
+
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:15px;color:#333;padding:18px 0;position:relative}
+.nav-links a:hover{color:#ff6a00}
+.nav-links a.active{color:#ff6a00}
+.nav-links a.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:#ff6a00}
+
+/* 搜索区 */
+.nav-search{flex:1;max-width:380px;margin:0 30px}
+.search-box{display:flex;align-items:center;background:#f5f5f5;border-radius:20px;overflow:hidden}
+.search-box input{flex:1;height:36px;border:none;background:transparent;padding:0 16px;outline:0;font-size:14px}
+.search-btn{width:44px;height:36px;background:#ff6a00;border:none;color:#fff;font-size:16px;cursor:pointer;border-radius:0 20px 20px 0}
+.search-btn:hover{background:#ff5500}
+
+/* 用户功能区 */
+.nav-actions{display:flex;align-items:center;gap:18px}
+.nav-actions a{font-size:14px;color:#666;white-space:nowrap}
+.nav-actions a:hover{color:#ff6a00}
+.vip-btn{background:#ff6a00!important;color:#fff!important;padding:6px 14px;border-radius:14px}
+.vip-btn:hover{background:#ff5500!important}
+.app-icon{font-size:20px}
+.user-avatar{width:32px;height:32px;background:#f0f0f0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer}
+
+/* Banner轮播区 */
+.banner-wrap{max-width:1200px;margin:15px auto;padding:0 20px}
+.banner{height:200px;border-radius:12px;overflow:hidden;position:relative}
+.banner::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,rgba(255,240,150,0.8),rgba(255,240,150,0.2));z-index:1}
+.banner-slide{display:flex;height:100%;transition:0.5s;position:relative;z-index:2}
+.banner-item{min-width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px;font-weight:500;text-align:center;position:relative}
+.banner-item:nth-child(1){background:url('d:/11yfy/1.jpg') center/cover}
+.banner-item:nth-child(2){background:url('d:/11yfy/2.webp') center/cover}
+.banner-item:nth-child(3){background:url('d:/11yfy/3.webp') center/cover}
+.banner-item::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.3)}
+.banner-item span{display:block;font-size:18px;font-weight:400;margin-top:12px;opacity:0.9;position:relative;z-index:1}
+.banner-dots{position:absolute;bottom:15px;left:0;right:0;display:flex;justify-content:center;gap:10px;z-index:3}
+.banner-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer}
+.banner-dot.active{background:#fff;width:24px;border-radius:5px}
+
+/* 分类导航区 */
+.category-wrap{max-width:1200px;margin:0 auto;padding:0 20px 20px}
+.category{background:#fff;border-radius:10px;padding:18px 20px}
+.category-title{font-size:15px;font-weight:600;margin-bottom:12px}
+.category-grid{display:flex;flex-wrap:wrap;gap:8px}
+.category-item{padding:8px 16px;background:#f7f7f7;border-radius:16px;font-size:13px;cursor:pointer;transition:all 0.2s}
+.category-item:hover{background:#ffefe5;color:#ff6a00}
+.category-item.active{background:#ff6a00;color:#fff}
+.category-separator{width:1px;height:24px;background:#e5e5e5;margin:0 8px}
+.rank-btn{background:#fff4ee;color:#ff6a00;border:1px solid #ffdcc5}
+
+/* 内容主体 */
+.main-wrap{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;gap:20px}
+.main-content{flex:1}
+.sidebar{width:260px}
+
+/* 内容模块通用样式 */
+.section{background:#fff;border-radius:10px;margin-bottom:18px;overflow:hidden}
+.section-head{padding:14px 18px;border-bottom:1px solid #f5f5f5;display:flex;justify-content:space-between;align-items:center}
+.section-title{font-size:16px;font-weight:600}
+.section-more{font-size:12px;color:#999;cursor:pointer}
+.section-more:hover{color:#ff6a00}
+
+/* 猜你喜欢 */
+.guess-wall{padding:15px;display:grid;grid-template-columns:repeat(5,1fr);gap:15px}
+.guess-card{text-align:center;cursor:pointer}
+.guess-cover{width:90px;height:90px;border-radius:8px;margin:0 auto 8px;background:#eee;overflow:hidden}
+.guess-cover img{width:100%;height:100%;object-fit:cover}
+.guess-name{font-size:12px;line-height:1.4;max-height:2.8em;overflow:hidden}
+.vip-tag{display:inline-block;padding:2px 6px;background:#ffd700;color:#333;font-size:10px;border-radius:2px;margin-top:4px}
+.free-tag{display:inline-block;padding:2px 6px;background:#34c759;color:#fff;font-size:10px;border-radius:2px;margin-top:4px}
+.refresh-btn{font-size:12px;color:#ff6a00;cursor:pointer;padding:4px 8px}
+.refresh-btn:hover{background:#fff4ee}
+
+/* 有声书/相声评书/儿童/热点/娱乐模块 */
+.album-row{padding:15px;display:flex;gap:12px;flex-wrap:wrap}
+.album-card{width:calc(20% - 12px);text-align:center;cursor:pointer}
+.album-cover{width:100%;height:100px;border-radius:8px;margin-bottom:8px;background:#eee;overflow:hidden}
+.album-cover img{width:100%;height:100%;object-fit:cover}
+.album-name{font-size:12px;line-height:1.4;max-height:2.8em;overflow:hidden}
+
+/* 热门榜单 */
+.hot-list{padding:12px 18px}
+.hot-item{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid #f5f5f5}
+.hot-item:last-child{border-bottom:none}
+.hot-num{width:22px;font-size:14px;font-weight:600;color:#ff6a00;text-align:center}
+.hot-num.top{color:#ff6a00}
+.hot-cover{width:45px;height:45px;border-radius:6px;margin:0 12px;background:#eee;overflow:hidden;flex-shrink:0}
+.hot-cover img{width:100%;height:100%;object-fit:cover}
+.hot-info{flex:1;min-width:0}
+.hot-name{font-size:13px;font-weight:500;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hot-author{font-size:11px;color:#999}
+
+/* 最近更新 */
+.update-list{padding:12px 18px}
+.update-item{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid #f5f5f5}
+.update-item:last-child{border-bottom:none}
+.update-cover{width:50px;height:50px;border-radius:6px;margin-right:12px;background:#eee;overflow:hidden;flex-shrink:0}
+.update-cover img{width:100%;height:100%;object-fit:cover}
+.update-info{flex:1;min-width:0}
+.update-name{font-size:13px;font-weight:500;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.update-meta{font-size:11px;color:#999}
+.update-btn{color:#ff6a00;font-size:12px;padding:4px 10px;border:1px solid #ffdcc5;border-radius:12px;white-space:nowrap}
+.update-btn:hover{background:#fff4ee}
+
+/* 右侧边栏 */
+.sidebar-section{background:#fff;border-radius:10px;margin-bottom:18px;padding:18px}
+.sidebar-title{font-size:15px;font-weight:600;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid #f0f0f0}
+.login-prompt{text-align:center;padding:20px 0}
+.login-prompt p{color:#666;font-size:13px;margin-bottom:12px}
+.login-btn{display:inline-block;padding:8px 24px;background:#ff6a00;color:#fff;border-radius:20px;font-size:14px}
+.qr-section{text-align:center;padding:15px 0}
+.qr-code{width:120px;height:120px;margin:0 auto 10px;border-radius:8px}
+.qr-code img{width:100%;height:100%}
+.download-links{text-align:center}
+.download-links a{display:inline-block;padding:6px 12px;font-size:12px;color:#666;border:1px solid #e5e5e5;border-radius:4px;margin:4px}
+.download-links a:hover{border-color:#ff6a00;color:#ff6a00}
+
+/* 底部播放器 */
+.player-bar{position:fixed;bottom:0;left:0;width:100%;height:65px;background:#fff;border-top:1px solid #eee;box-shadow:0 -2px 10px rgba(0,0,0,0.08);z-index:998}
+.player-inner{max-width:1200px;margin:0 auto;height:100%;display:flex;align-items:center;padding:0 20px;justify-content:space-between}
+.player-info{display:flex;align-items:center;gap:12px}
+.player-cover{width:44px;height:44px;border-radius:6px;background:#eee}
+.player-text{line-height:1.4}
+.player-title{font-weight:500;font-size:14px}
+.player-author{font-size:12px;color:#999}
+.player-controls{display:flex;align-items:center;gap:14px}
+.control-btn{width:34px;height:34px;border-radius:50%;background:#ff6a00;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
+.control-btn.small{width:28px;height:28px;font-size:12px;background:#f5f5f5;color:#666}
+.progress{flex:1;max-width:400px;height:4px;background:#e5e5e5;border-radius:2px;margin:0 20px;cursor:pointer;position:relative}
+.progress:hover{height:6px}
+.progress-bar{height:100%;background:#ff6a00;border-radius:2px;position:relative;transition:width 0.1s}
+.progress-bar::after{content:'';position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:12px;height:12px;background:#ff6a00;border-radius:50%;opacity:0;transition:opacity 0.2s}
+.progress:hover .progress-bar::after{opacity:1}
+.progress-time{position:absolute;top:-20px;font-size:11px;color:#666;white-space:nowrap}
+.progress-time.left{left:0}
+.progress-time.right{right:0}
+.player-extra{display:flex;gap:18px;font-size:13px;color:#666;cursor:pointer}
+.player-extra span:hover{color:#ff6a00}
+
+/* 夜间模式 */
+.night{background:#1a1a1a;color:#ccc}
+.night .top-nav,.night .category,.night .section,.night .sidebar-section,.night .player-bar{background:#242424}
+.night .hot-name,.night .update-name,.night .section-title{color:#fff}
+
+/* 弹窗样式 */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:10000;display:none;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:12px;width:380px;max-width:90vw;position:relative;animation:modalIn 0.3s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+.modal-close{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:#f5f5f5;border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:#e5e5e5}
+.modal-header{padding:24px 24px 0;text-align:center}
+.modal-title{font-size:20px;font-weight:600}
+.modal-body{padding:20px 24px}
+
+/* 登录弹窗 */
+.login-modal .modal-header{padding-top:30px}
+.login-tabs{display:flex;border-bottom:1px solid #f0f0f0;margin-bottom:20px}
+.login-tab{flex:1;padding:12px 0;text-align:center;font-size:15px;color:#666;cursor:pointer;position:relative}
+.login-tab.active{color:#ff6a00;font-weight:500}
+.login-tab.active::after{content:'';position:absolute;bottom:-1px;left:20%;right:20%;height:2px;background:#ff6a00}
+.login-form-item{margin-bottom:16px}
+.login-form-item input{width:100%;height:44px;border:1px solid #e5e5e5;border-radius:8px;padding:0 14px;font-size:14px;outline:none}
+.login-form-item input:focus{border-color:#ff6a00}
+.login-code{display:flex;gap:10px}
+.login-code input{flex:1}
+.login-code-btn{width:100px;height:44px;background:#f5f5f5;border:none;border-radius:8px;font-size:13px;cursor:pointer;color:#ff6a00}
+.login-code-btn:hover{background:#eee}
+.login-btn-full{width:100%;height:44px;background:#ff6a00;color:#fff;border:none;border-radius:22px;font-size:16px;cursor:pointer}
+.login-btn-full:hover{background:#ff5500}
+.login-third{margin-top:20px;text-align:center}
+.login-third p{font-size:12px;color:#999;margin-bottom:12px}
+.login-icons{display:flex;justify-content:center;gap:24px}
+.login-icon{width:40px;height:40px;border-radius:50%;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer}
+.login-bottom{text-align:center;margin-top:16px;font-size:13px;color:#999}
+.login-bottom a{color:#ff6a00}
+
+/* VIP弹窗 */
+.vip-modal{width:420px}
+.vip-header-bg{height:100px;background:linear-gradient(135deg,#ff6a00,#ff8533);border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:center;color:#fff}
+.vip-header-bg .vip-icon{font-size:36px;margin-bottom:6px}
+.vip-header-bg .vip-text{font-size:18px;font-weight:600}
+.vip-packages{display:flex;gap:10px;margin-top:16px}
+.vip-package{flex:1;border:1px solid #e5e5e5;border-radius:8px;padding:12px 0;text-align:center;cursor:pointer;transition:all 0.2s}
+.vip-package:hover{border-color:#ff6a00}
+.vip-package.selected{border-color:#ff6a00;background:#fff8f5}
+.vip-package .price{font-size:20px;font-weight:600;color:#ff6a00}
+.vip-package .period{font-size:12px;color:#999;margin-top:4px}
+.vip-package .original{font-size:11px;color:#ccc;text-decoration:line-through;margin-top:2px}
+.vip-features{margin-top:16px}
+.vip-feature{display:flex;align-items:center;gap:8px;padding:8px 0;font-size:13px;color:#666}
+.vip-feature span{color:#34c759}
+.vip-confirm{width:100%;height:44px;background:#ff6a00;color:#fff;border:none;border-radius:22px;font-size:16px;cursor:pointer;margin-top:16px}
+.vip-confirm:hover{background:#ff5500}
+
+/* 响应式 */
+@media(max-width:992px){
+  .main-wrap{flex-direction:column}
+  .sidebar{width:100%}
+  .guess-wall{grid-template-columns:repeat(4,1fr)}
+  .album-card{width:calc(25% - 12px)}
+}
+@media(max-width:768px){
+  .nav-search,.nav-links,.nav-actions .nav-action,.nav-actions .app-icon{display:none}
+  .nav-brand{margin-right:auto}
+  .guess-wall{grid-template-columns:repeat(3,1fr)}
+  .album-card{width:calc(33.33% - 12px)}
+  .banner{height:100px}
+  .banner-item{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<nav class="top-nav">
+  <div class="nav-wrap">
+    <!-- 品牌与主导航 -->
+    <div class="nav-brand">
+      <div class="brand-logo">
+        <span class="icon">🎧</span>
+        <span class="logo-text">听雨轩</span>
+      </div>
+      <div class="nav-links">
+        <a href="#" class="active">发现</a>
+        <a href="#">分类</a>
+        <a href="#">电台</a>
+      </div>
+    </div>
+    
+    <!-- 搜索区 -->
+    <div class="nav-search">
+      <div class="search-box">
+        <input type="text" placeholder="专辑 / 声音 / 主播">
+        <button class="search-btn">🔍</button>
+      </div>
+    </div>
+    
+    <!-- 用户功能区 -->
+    <div class="nav-actions">
+      <a href="#">上传</a>
+      <a href="#">创作中心</a>
+      <a href="#">有声出版</a>
+      <a href="#" class="vip-btn">开通会员</a>
+      <a href="#" class="app-icon">📱</a>
+      <div class="user-avatar">👤</div>
+    </div>
+  </div>
+</nav>
+
+<!-- Banner轮播区 -->
+<div class="banner-wrap">
+  <div class="banner">
+    <div class="banner-slide" id="bannerSlide">
+      <div class="banner-item">
+        听雨轩 · 海量有声内容
+        <span>专业有声内容平台</span>
+      </div>
+      <div class="banner-item">
+        热门有声剧推荐
+        <span>独家精品内容</span>
+      </div>
+      <div class="banner-item">
+        VIP会员专享
+        <span>免费畅听全部内容</span>
+      </div>
+    </div>
+    <div class="banner-dots">
+      <div class="banner-dot active" onclick="goToSlide(0)"></div>
+      <div class="banner-dot" onclick="goToSlide(1)"></div>
+      <div class="banner-dot" onclick="goToSlide(2)"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 分类导航区 -->
+<div class="category-wrap">
+  <div class="category">
+    <div class="category-title">全部分类</div>
+    <div class="category-grid">
+      <span class="category-item active">小说</span>
+      <span class="category-item">男频</span>
+      <span class="category-item">女频</span>
+      <span class="category-item">相声</span>
+      <span class="category-item">儿童</span>
+      <span class="category-item">音乐</span>
+      <span class="category-item">外语</span>
+      <span class="category-item">商业</span>
+      <span class="category-item">热点</span>
+      <div class="category-separator"></div>
+      <span class="category-item rank-btn">🏆 排行榜</span>
+    </div>
+  </div>
+</div>
+
+<!-- 内容主体 -->
+<div class="main-wrap">
+  <div class="main-content">
+    
+    <!-- 猜你喜欢 -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-title">猜你喜欢</span>
+        <span class="refresh-btn">🔄 换一换</span>
+      </div>
+      <div class="guess-wall">
+        <div class="guess-card">
+          <div class="guess-cover"><img src="https://picsum.photos/90/90?kendo"></div>
+          <div class="guess-name">剑道第一仙</div>
+          <span class="vip-tag">VIP</span>
+        </div>
+        <div class="guess-card">
+          <div class="guess-cover"><img src="https://picsum.photos/90/90?tomb"></div>
+          <div class="guess-name">盗墓笔记</div>
+          <span class="free-tag">免费</span>
+        </div>
+        <div class="guess-card">
+          <div class="guess-cover"><img src="https://picsum.photos/90/90?martial"></div>
+          <div class="guess-name">全球高武</div>
+          <span class="vip-tag">VIP</span>
+        </div>
+        <div class="guess-card">
+          <div class="guess-cover"><img src="https://picsum.photos/90/90?night"></div>
+          <div class="guess-name">长夜余火</div>
+          <span class="free-tag">免费</span>
+        </div>
+        <div class="guess-card">
+          <div class="guess-cover"><img src="https://picsum.photos/90/90?woman"></div>
+          <div class="guess-name">夫人你马甲又掉了</div>
+          <span class="vip-tag">VIP</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 有声书 -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-title">有声书</span>
+        <span class="section-more">更多 ></span>
+      </div>
+      <div class="album-row">
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?ghost"></div>
+          <div class="album-name">鬼吹灯</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?ming"></div>
+          <div class="album-name">明朝那些事儿</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?white"></div>
+          <div class="album-name">白鹿原</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?life"></div>
+          <div class="album-name">活着</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?world"></div>
+          <div class="album-name">平凡的世界</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 相声评书 -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-title">相声评书</span>
+        <span class="section-more">更多 ></span>
+      </div>
+      <div class="album-row">
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?comedian"></div>
+          <div class="album-name">郭德纲相声选</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?comedy"></div>
+          <div class="album-name">单口相声集锦</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?yuen"></div>
+          <div class="album-name">岳云鹏相声专场</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?three"></div>
+          <div class="album-name">评书三国演义</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?water"></div>
+          <div class="album-name">评书水浒传</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 儿童 -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-title">儿童</span>
+        <span class="section-more">更多 ></span>
+      </div>
+      <div class="album-row">
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?school"></div>
+          <div class="album-name">米小圈上学记</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?plants"></div>
+          <div class="album-name">植物大战僵尸</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?peppa"></div>
+          <div class="album-name">小猪佩奇</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?bedtime"></div>
+          <div class="album-name">睡前故事</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?monkey"></div>
+          <div class="album-name">西游记儿童版</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 热点 -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-title">热点</span>
+        <span class="section-more">更多 ></span>
+      </div>
+      <div class="album-row">
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?news"></div>
+          <div class="album-name">新闻资讯</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?hot"></div>
+          <div class="album-name">热点解读</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?podcast"></div>
+          <div class="album-name">资讯播客</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?headline"></div>
+          <div class="album-name">今日头条</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?report"></div>
+          <div class="album-name">深度报道</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 娱乐 -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-title">娱乐</span>
+        <span class="section-more">更多 ></span>
+      </div>
+      <div class="album-row">
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?emotion"></div>
+          <div class="album-name">情感故事</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?mystery"></div>
+          <div class="album-name">悬疑推理</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?talk"></div>
+          <div class="album-name">脱口秀</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?star"></div>
+          <div class="album-name">星座运势</div>
+        </div>
+        <div class="album-card">
+          <div class="album-cover"><img src="https://picsum.photos/120/100?funny"></div>
+          <div class="album-name">搞笑段子</div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- 右侧边栏 -->
+  <div class="sidebar">
+    <!-- 热门榜单 -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-title">🏆 热门榜单</span>
+      </div>
+      <div class="hot-list">
+        <div class="hot-item">
+          <span class="hot-num top">1</span>
+          <div class="hot-cover"><img src="https://picsum.photos/45/45?h1"></div>
+          <div class="hot-info">
+            <div class="hot-name">剑道第一仙</div>
+            <div class="hot-author">主播：萧瑾瑜</div>
+          </div>
+        </div>
+        <div class="hot-item">
+          <span class="hot-num top">2</span>
+          <div class="hot-cover"><img src="https://picsum.photos/45/45?h2"></div>
+          <div class="hot-info">
+            <div class="hot-name">盗墓笔记</div>
+            <div class="hot-author">主播：南派三叔</div>
+          </div>
+        </div>
+        <div class="hot-item">
+          <span class="hot-num top">3</span>
+          <div class="hot-cover"><img src="https://picsum.photos/45/45?h3"></div>
+          <div class="hot-info">
+            <div class="hot-name">全球高武</div>
+            <div class="hot-author">主播：老鹰吃小鸡</div>
+          </div>
+        </div>
+        <div class="hot-item">
+          <span class="hot-num">4</span>
+          <div class="hot-cover"><img src="https://picsum.photos/45/45?h4"></div>
+          <div class="hot-info">
+            <div class="hot-name">长夜余火</div>
+            <div class="hot-author">主播：爱潜水的乌贼</div>
+          </div>
+        </div>
+        <div class="hot-item">
+          <span class="hot-num">5</span>
+          <div class="hot-cover"><img src="https://picsum.photos/45/45?h5"></div>
+          <div class="hot-info">
+            <div class="hot-name">夫人你马甲又掉了</div>
+            <div class="hot-author">主播：一路烦花</div>
+          </div>
+        </div>
+        <div class="hot-item">
+          <span class="hot-num">6</span>
+          <div class="hot-cover"><img src="https://picsum.photos/45/45?h6"></div>
+          <div class="hot-info">
+            <div class="hot-name">重生之都市仙尊</div>
+            <div class="hot-author">主播：洛书</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 最近更新 -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-title">最近更新</span>
+      </div>
+      <div class="update-list">
+        <div class="update-item">
+          <div class="update-cover"><img src="d:/image/1.jpg"></div>
+          <div class="update-info">
+            <div class="update-name">雪中悍刀行</div>
+            <div class="update-meta">更新：2小时前</div>
+          </div>
+          <span class="update-btn">播放</span>
+        </div>
+        <div class="update-item">
+          <div class="update-cover"><img src="https://picsum.photos/50/50?u2"></div>
+          <div class="update-info">
+            <div class="update-name">凡人修仙传</div>
+            <div class="update-meta">更新：4小时前</div>
+          </div>
+          <span class="update-btn">播放</span>
+        </div>
+        <div class="update-item">
+          <div class="update-cover"><img src="https://picsum.photos/50/50?u3"></div>
+          <div class="update-info">
+            <div class="update-name">遮天</div>
+            <div class="update-meta">更新：6小时前</div>
+          </div>
+          <span class="update-btn">播放</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 登录入口 -->
+    <div class="sidebar-section">
+      <div class="login-prompt">
+        <p>登录后享受更多功能</p>
+        <a href="#" class="login-btn">立即登录</a>
+      </div>
+    </div>
+    
+    <!-- APP下载 -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">下载客户端</div>
+      <div class="qr-section">
+        <div class="qr-code"><img src="d:/image/SM.jpg" style="width:100%;height:100%"></div>
+        <p style="font-size:12px;color:#666">扫码下载APP</p>
+      </div>
+      <div class="download-links">
+        <a href="#" data-url="https://example.com/iphone">iPhone版</a>
+        <a href="#" data-url="https://example.com/android">Android版</a>
+        <a href="#" data-url="https://example.com/pc">电脑版</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 底部播放器 -->
+<div class="player-bar">
+  <div class="player-inner">
+    <div class="player-info">
+      <div class="player-cover"></div>
+      <div class="player-text">
+        <div class="player-title">等待播放</div>
+        <div class="player-author">点击专辑即可播放</div>
+      </div>
+    </div>
+    <div class="player-controls">
+      <div class="control-btn small">⏮</div>
+      <div class="control-btn" id="playBtn">▶</div>
+      <div class="control-btn small">⏭</div>
+      <div class="progress" id="progressBar" onclick="seekProgress(event)">
+        <div class="progress-bar" id="progressFill"></div>
+      </div>
+    </div>
+    <div class="player-extra">
+      <span>夜间</span>
+      <span>1.0x</span>
+      <span>15分钟</span>
+    </div>
+  </div>
+</div>
+
+<!-- 登录弹窗 -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal login-modal">
+    <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+    <div class="modal-header">
+      <div class="login-tabs">
+        <div class="login-tab active" onclick="switchTab(this)">验证码登录</div>
+        <div class="login-tab" onclick="switchTab(this)">密码登录</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="login-form-item">
+        <input type="tel" placeholder="请输入手机号">
+      </div>
+      <div class="login-form-item login-code">
+        <input type="text" placeholder="请输入验证码">
+        <button class="login-code-btn">获取验证码</button>
+      </div>
+      <button class="login-btn-full">登录</button>
+      <div class="login-third">
+        <p>其他登录方式</p>
+        <div class="login-icons">
+          <div class="login-icon"><img src="https://picsum.photos/24/24?wechat" style="width:24px;height:24px"></div>
+          <div class="login-icon"><img src="https://picsum.photos/24/24?qq" style="width:24px;height:24px"></div>
+          <div class="login-icon"><img src="https://picsum.photos/24/24?weibo" style="width:24px;height:24px"></div>
+        </div>
+      </div>
+      <div class="login-bottom">
+        登录即表示同意<a href="#">《用户协议》</a>和<a href="#">《隐私政策》</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIP开通弹窗 -->
+<div class="modal-overlay" id="vipModal">
+  <div class="modal vip-modal">
+    <button class="modal-close" onclick="closeModal('vipModal')">✕</button>
+    <div class="vip-header-bg">
+      <div style="text-align:center">
+        <div class="vip-icon">👑</div>
+        <div class="vip-text">开通VIP会员</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="vip-packages">
+        <div class="vip-package selected" onclick="selectPackage(this)">
+          <div class="price">¥18</div>
+          <div class="period">月卡</div>
+          <div class="original">¥28</div>
+        </div>
+        <div class="vip-package" onclick="selectPackage(this)">
+          <div class="price">¥50</div>
+          <div class="period">季卡</div>
+          <div class="original">¥80</div>
+        </div>
+        <div class="vip-package" onclick="selectPackage(this)">
+          <div class="price">¥168</div>
+          <div class="period">年卡</div>
+          <div class="original">¥328</div>
+        </div>
+      </div>
+      <div class="vip-features">
+        <div class="vip-feature"><span>✓</span> 免费收听全部VIP内容</div>
+        <div class="vip-feature"><span>✓</span> 去除广告打扰</div>
+        <div class="vip-feature"><span>✓</span> 专属会员标识</div>
+        <div class="vip-feature"><span>✓</span> 优先体验新功能</div>
+      </div>
+      <button class="vip-confirm">立即开通</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// 弹窗功能
+function openModal(id) {
+  document.getElementById(id).classList.add('show');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+// 点击遮罩关闭
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('show');
+    }
+  });
+});
+
+// 登录弹窗Tab切换
+function switchTab(tab) {
+  tab.parentElement.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  
+  // 切换登录方式
+  const formItems = document.querySelectorAll('.login-form-item');
+  if (tab.textContent === '密码登录') {
+    formItems[1].innerHTML = '<input type="password" placeholder="请输入密码">';
+  } else {
+    formItems[1].innerHTML = '<input type="text" placeholder="请输入验证码"><button class="login-code-btn">获取验证码</button>';
+    // 重新绑定获取验证码按钮
+    document.querySelector('.login-code-btn').addEventListener('click', function() {
+      this.textContent = '60s后重试';
+      this.disabled = true;
+      setTimeout(() => {
+        this.textContent = '获取验证码';
+        this.disabled = false;
+      }, 60000);
+    });
+  }
+}
+
+// VIP套餐选择
+function selectPackage(pkg) {
+  pkg.parentElement.querySelectorAll('.vip-package').forEach(p => p.classList.remove('selected'));
+  pkg.classList.add('selected');
+}
+
+// 连接开通会员和登录按钮
+document.querySelector('.vip-btn').addEventListener('click', function(e) {
+  e.preventDefault();
+  openModal('vipModal');
+});
+
+document.querySelector('.login-btn').addEventListener('click', function(e) {
+  e.preventDefault();
+  openModal('loginModal');
+});
+
+document.querySelector('.user-avatar').addEventListener('click', function(e) {
+  e.preventDefault();
+  openModal('loginModal');
+});
+
+// 导航栏交互
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// 分类导航交互
+document.querySelectorAll('.category-item').forEach(item => {
+  item.addEventListener('click', function() {
+    document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// 搜索功能
+document.querySelector('.search-btn').addEventListener('click', function() {
+  const input = document.querySelector('.search-box input');
+  const keyword = input.value.trim();
+  if (keyword) {
+    alert('搜索: ' + keyword);
+  }
+});
+
+document.querySelector('.search-box input').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    document.querySelector('.search-btn').click();
+  }
+});
+
+// 内容卡片点击 - 跳转登录
+document.querySelectorAll('.guess-card, .album-card, .hot-item, .update-item').forEach(card => {
+  card.addEventListener('click', function() {
+    openModal('loginModal');
+  });
+});
+
+// 播放器控制
+let isPlaying = false;
+let progress = 0;
+let progressInterval;
+
+document.getElementById('playBtn').addEventListener('click', function() {
+  isPlaying = !isPlaying;
+  this.textContent = isPlaying ? '⏸' : '▶';
+  if (isPlaying) {
+    document.querySelector('.player-author').textContent = '正在播放...';
+    startProgress();
+  } else {
+    document.querySelector('.player-author').textContent = '已暂停';
+    stopProgress();
+  }
+});
+
+function startProgress() {
+  progressInterval = setInterval(() => {
+    progress += 0.5;
+    if (progress >= 100) {
+      progress = 0;
+      isPlaying = false;
+      document.getElementById('playBtn').textContent = '▶';
+      document.querySelector('.player-author').textContent = '播放完成';
+      stopProgress();
+    }
+    document.getElementById('progressFill').style.width = progress + '%';
+  }, 100);
+}
+
+function stopProgress() {
+  clearInterval(progressInterval);
+}
+
+function seekProgress(e) {
+  const progressBar = document.getElementById('progressBar');
+  const rect = progressBar.getBoundingClientRect();
+  const percent = ((e.clientX - rect.left) / rect.width) * 100;
+  progress = Math.max(0, Math.min(100, percent));
+  document.getElementById('progressFill').style.width = progress + '%';
+}
+
+// 刷新推荐
+document.querySelector('.refresh-btn').addEventListener('click', function() {
+  openModal('loginModal');
+});
+
+// 更多按钮
+(document.querySelectorAll('.section-more') || []).forEach(btn => {
+  btn.addEventListener('click', function() {
+    openModal('loginModal');
+  });
+});
+
+// 下载链接
+document.querySelectorAll('.download-links a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    alert('下载 ' + this.textContent);
+  });
+});
+
+// 移动端适配
+function handleMobile() {
+  if (window.innerWidth <= 768) {
+    // 移动端适配逻辑
+  }
+}
+
+window.addEventListener('resize', handleMobile);
+handleMobile();
+
+// Banner轮播
+let slideIndex = 0;
+const slide = document.getElementById('bannerSlide');
+const dots = document.querySelectorAll('.banner-dot');
+
+function goToSlide(index) {
+  slideIndex = index;
+  slide.style.transform = `translateX(-${index * 100}%)`;
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === index);
+  });
+}
+
+setInterval(() => {
+  slideIndex = (slideIndex + 1) % 3;
+  goToSlide(slideIndex);
+}, 4000);
+
+// 夜间模式切换
+const nightBtn = document.querySelector('.player-extra span');
+nightBtn.addEventListener('click', function() {
+  document.body.classList.toggle('night');
+  this.textContent = document.body.classList.contains('night') ? '日间' : '夜间';
+});
+
+// 倍速切换
+const speedBtn = document.querySelectorAll('.player-extra span')[1];
+speedBtn.addEventListener('click', function() {
+  const speeds = ['1.0x', '1.25x', '1.5x', '2.0x'];
+  const currentSpeed = this.textContent;
+  const currentIndex = speeds.indexOf(currentSpeed);
+  const nextIndex = (currentIndex + 1) % speeds.length;
+  this.textContent = speeds[nextIndex];
+  alert('播放速度: ' + speeds[nextIndex]);
+});
+
+// 定时功能
+const timerBtn = document.querySelectorAll('.player-extra span')[2];
+timerBtn.addEventListener('click', function() {
+  const times = ['15分钟', '30分钟', '1小时', '关闭定时'];
+  const currentTime = this.textContent;
+  const currentIndex = times.indexOf(currentTime);
+  const nextIndex = (currentIndex + 1) % times.length;
+  this.textContent = times[nextIndex];
+  alert('定时设置: ' + times[nextIndex]);
+});
+
+// 初始化
+window.addEventListener('load', function() {
+  // 初始化播放器状态
+  document.querySelector('.player-extra span:nth-child(1)').textContent = '夜间';
+  document.querySelector('.player-extra span:nth-child(2)').textContent = '1.0x';
+  document.querySelector('.player-extra span:nth-child(3)').textContent = '15分钟';
+  
+  // 绑定获取验证码按钮
+  const codeBtn = document.querySelector('.login-code-btn');
+  if (codeBtn) {
+    codeBtn.addEventListener('click', function() {
+      this.textContent = '60s后重试';
+      this.disabled = true;
+      setTimeout(() => {
+        this.textContent = '获取验证码';
+        this.disabled = false;
+      }, 60000);
+    });
+  }
+});
+</script>
+</body>
+</html>
